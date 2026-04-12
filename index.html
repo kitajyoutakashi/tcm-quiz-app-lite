@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1YVGG1ZC4N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-1YVGG1ZC4N');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日中鍼認定Basic therapist練習ページ（簡易版）</title>
@@ -81,10 +90,9 @@
     let currentIndex = 0;
     let score = 0;
 
-    // ファイル名が 10mon.json であることを確認すること
     fetch('10mon.json')
         .then(response => {
-            if (!response.ok) throw new Error('10mon.json が見つかりません。リポジトリ直下に配置されているか確認してください。');
+            if (!response.ok) throw new Error('10mon.json が読み込めません');
             return response.json();
         })
         .then(data => {
@@ -109,7 +117,7 @@
         })
         .catch(error => {
             console.error('Error loading JSON:', error);
-            alert('問題データの読み込みに失敗しました。10mon.jsonが正しくアップロードされているか確認してください。');
+            alert('問題データの読み込みに失敗しました。10mon.jsonを確認してください。');
         });
 
     function adjustRangeMax() {
