@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>日中鍼認定Basic therapist練習ページ</title>
+    <title>日中鍼認定Basic therapist練習ページ（簡易版）</title>
     <style>
         :root { --main-color: #2c3e50; --accent-color: #27ae60; --error-color: #e74c3c; --bg-color: #f4f7f6; }
         body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background-color: var(--bg-color); color: var(--main-color); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .container { background: white; max-width: 600px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box; }
         .hidden { display: none; }
         h1 { font-size: 1.4rem; margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; color: var(--main-color); }
-        input[type="password"], select { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+        select { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
         button { background-color: var(--accent-color); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 1rem; margin: 10px 5px; transition: 0.3s; min-width: 120px; }
         button:hover { opacity: 0.8; }
         button:disabled { background-color: #ccc; cursor: not-allowed; }
@@ -32,15 +32,7 @@
 <body>
 
 <div class="container">
-    <div id="view-login">
-        <h1>日中鍼認定Basic Therapist 問題トレーニング・ログイン</h1>
-        <p>パスワードを入力してください</p>
-        <input type="password" id="password-input" placeholder="Password">
-        <br>
-        <button onclick="checkPassword()">ログイン</button>
-    </div>
-
-    <div id="view-setup" class="hidden">
+    <div id="view-setup">
         <h1>学習設定</h1>
         <p>学習したい分野を選択してください</p>
         <select id="category-select" onchange="adjustRangeMax()">
@@ -78,7 +70,7 @@
         <div id="score-display" style="font-size: 1.8rem; margin: 30px 0; line-height: 1.4;"></div>
         <button onclick="showView('view-setup')">別の分野を学習する</button>
         <br>
-        <button style="background-color: #95a5a6; margin-top: 10px;" onclick="location.reload()">ログアウトして戻る</button>
+        <button style="background-color: #95a5a6; margin-top: 10px;" onclick="location.reload()">最初に戻る</button>
     </div>
 </div>
 
@@ -88,11 +80,11 @@
     let categoryCounts = {}; 
     let currentIndex = 0;
     let score = 0;
-    const PASS = "nicchushin2026"; 
 
+    // ファイル名が 10mon.json であることを確認すること
     fetch('10mon.json')
         .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
+            if (!response.ok) throw new Error('10mon.json が見つかりません。リポジトリ直下に配置されているか確認してください。');
             return response.json();
         })
         .then(data => {
@@ -117,22 +109,13 @@
         })
         .catch(error => {
             console.error('Error loading JSON:', error);
-            alert('問題データの読み込みに失敗しました。');
+            alert('問題データの読み込みに失敗しました。10mon.jsonが正しくアップロードされているか確認してください。');
         });
-
-    function checkPassword() {
-        const input = document.getElementById('password-input').value;
-        if(input === PASS) {
-            showView('view-setup');
-        } else {
-            alert("パスワードが正しくありません");
-        }
-    }
 
     function adjustRangeMax() {
         const cat = document.getElementById('category-select').value;
         const rangeInput = document.getElementById('question-range');
-        const maxVal = (cat === "すべて") ? allQuestions.length : categoryCounts[cat];
+        const maxVal = (cat === "すべて") ? allQuestions.length : (categoryCounts[cat] || 0);
         rangeInput.max = maxVal;
         if (parseInt(rangeInput.value) > maxVal) {
             rangeInput.value = maxVal;
@@ -145,9 +128,7 @@
     }
 
     function showView(id) {
-        // すべての画面を隠す
         document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
-        // 指定した画面だけ表示する
         document.getElementById(id).classList.remove('hidden');
     }
 
@@ -156,6 +137,7 @@
         const num = parseInt(document.getElementById('question-range').value);
         targetQuestions = allQuestions.filter(q => cat === "すべて" || q.category === cat);
         targetQuestions = targetQuestions.sort(() => Math.random() - 0.5).slice(0, num);
+        
         if (targetQuestions.length === 0) {
             alert("該当する問題がありませんでした");
             return;
@@ -182,8 +164,10 @@
         const q = targetQuestions[currentIndex];
         const feedback = document.getElementById('feedback');
         document.querySelectorAll('.ox-container button').forEach(b => b.disabled = true);
+        
         const cleanAnswer = q.answer.trim().replace(/[◯○]/g, '〇'); 
         const cleanChoice = choice.trim().replace(/[◯○]/g, '〇');
+        
         if(cleanChoice === cleanAnswer) {
             feedback.textContent = "正解！";
             feedback.style.color = "var(--accent-color)";
