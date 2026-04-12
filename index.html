@@ -24,7 +24,6 @@
         button:hover { opacity: 0.8; }
         button:disabled { background-color: #ccc; cursor: not-allowed; }
         
-        /* 外部リンクボタン用のスタイル */
         .btn-link { 
             display: inline-block; 
             background-color: #e67e22; 
@@ -32,9 +31,10 @@
             text-decoration: none; 
             padding: 12px 24px; 
             border-radius: 6px; 
-            margin: 20px 0; 
+            margin: 10px 0; 
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 1rem;
         }
 
         .ox-container { display: flex; justify-content: center; gap: 30px; margin: 25px 0; }
@@ -98,13 +98,13 @@
         <h1>学習終了</h1>
         <div id="score-display" style="font-size: 1.8rem; margin: 30px 0; line-height: 1.4;"></div>
         
-        <p style="margin-top: 10px;">さらなる学習には公式テキストがおすすめです</p>
-        <a href="https://xn--z8j3ah2b4856byrk.com/?pid=188521497" target="_blank" class="btn-link">公式テキストを購入する</a>
-        <br>
-
         <button onclick="showView('view-setup')">別の分野を学習する</button>
         <br>
         <button style="background-color: #95a5a6; margin-top: 10px;" onclick="location.reload()">最初に戻る</button>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0 20px 0;">
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">さらなる学習には公式テキストがおすすめです</p>
+        <a href="https://xn--z8j3ah2b4856byrk.com/?pid=188521497" target="_blank" class="btn-link">公式テキストを購入する</a>
     </div>
 </div>
 
