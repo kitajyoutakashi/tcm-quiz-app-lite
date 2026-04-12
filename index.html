@@ -90,7 +90,7 @@
     let score = 0;
     const PASS = "nicchushin2026"; 
 
-    fetch('questions.json')
+    fetch('10mon.json')
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
