@@ -10,6 +10,23 @@
       gtag('config', 'G-1YVGG1ZC4N');
     </script>
 
+    バー（<input type="range">）の最大値は、HTML内の max 属性と、JavaScriptで allQuestions.length を代入している箇所の2箇所で制御されている。
+
+これらを修正し、最大値を「63」に固定、あるいは読み込んだデータ数に厳密に合わせる形に書き換えた。
+
+HTML
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日中鍼認定Basic therapist練習ページ（Lite版）</title>
@@ -57,7 +74,7 @@
 <div class="container">
     <div id="view-setup">
         <h1>学習設定</h1>
-        <p>全63問の中からランダムに出題されます</p>
+        <p>全問題の中からランダムに出題されます</p>
         
         <label class="range-label">出題問題数: <span id="range-value">10</span>問</label>
         <input type="range" id="question-range" min="1" max="63" value="10" oninput="updateRangeText(this.value)">
@@ -117,9 +134,19 @@
         })
         .then(data => {
             allQuestions = data;
-            // 最大出題数を実際のデータ数に合わせる（念のため）
+            
+            // 重要：バーの最大値を「読み込んだ問題数」か「63」の小さい方に合わせる
             const rangeInput = document.getElementById('question-range');
-            rangeInput.max = allQuestions.length;
+            const actualCount = allQuestions.length;
+            const maxLimit = 63; 
+            
+            rangeInput.max = Math.min(actualCount, maxLimit);
+            
+            // もし現在の値が最大値を超えていたら調整する
+            if (parseInt(rangeInput.value) > rangeInput.max) {
+                rangeInput.value = rangeInput.max;
+                updateRangeText(rangeInput.value);
+            }
         })
         .catch(error => {
             console.error('Error loading JSON:', error);
@@ -137,7 +164,6 @@
 
     function startQuiz() {
         const num = parseInt(document.getElementById('question-range').value);
-        // 全問題をシャッフルして、指定された数だけ取り出す
         targetQuestions = [...allQuestions].sort(() => Math.random() - 0.5).slice(0, num);
         
         if (targetQuestions.length === 0) {
