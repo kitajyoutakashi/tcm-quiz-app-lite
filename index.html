@@ -10,23 +10,6 @@
       gtag('config', 'G-1YVGG1ZC4N');
     </script>
 
-    バー（<input type="range">）の最大値は、HTML内の max 属性と、JavaScriptで allQuestions.length を代入している箇所の2箇所で制御されている。
-
-これらを修正し、最大値を「63」に固定、あるいは読み込んだデータ数に厳密に合わせる形に書き換えた。
-
-HTML
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-XXXXXXXXXX');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日中鍼認定Basic therapist練習ページ（Lite版）</title>
@@ -74,7 +57,7 @@ HTML
 <div class="container">
     <div id="view-setup">
         <h1>学習設定</h1>
-        <p>全問題の中からランダムに出題されます</p>
+        <p>全問題の中からランダムに出題される</p>
         
         <label class="range-label">出題問題数: <span id="range-value">10</span>問</label>
         <input type="range" id="question-range" min="1" max="63" value="10" oninput="updateRangeText(this.value)">
@@ -83,8 +66,7 @@ HTML
         <button onclick="startQuiz()">学習を開始する</button>
 
         <p class="analytics-note">
-            ※当サイトでは利用状況把握のためGoogle アナリティクスを使用しています。<br>
-            データは匿名で収集されており、個人を特定するものではありません。
+            ※当サイトでは利用状況把握のためGoogle アナリティクスを使用している。データは匿名で収集されており、個人を特定するものではない。
         </p>
     </div>
 
@@ -116,7 +98,7 @@ HTML
         <button style="background-color: #95a5a6; margin-top: 10px;" onclick="location.reload()">ページを更新する</button>
 
         <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0 20px 0;">
-        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">さらなる学習には公式テキストがおすすめです</p>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">さらなる学習には公式テキストがおすすめである</p>
         <a href="https://xn--z8j3ah2b4856byrk.com/?pid=188521497" target="_blank" class="btn-link">公式テキストを購入する</a>
     </div>
 </div>
@@ -127,30 +109,27 @@ HTML
     let currentIndex = 0;
     let score = 0;
 
-    fetch('3mon.json')
+    fetch('10mon.json')
         .then(response => {
-            if (!response.ok) throw new Error('10mon.json が読み込めません');
+            if (!response.ok) throw new Error('10mon.json が読み込めない');
             return response.json();
         })
         .then(data => {
             allQuestions = data;
-            
-            // 重要：バーの最大値を「読み込んだ問題数」か「63」の小さい方に合わせる
             const rangeInput = document.getElementById('question-range');
-            const actualCount = allQuestions.length;
-            const maxLimit = 63; 
+            // JSONのデータ数と上限63の、小さい方を最大値に設定する
+            const maxLimit = Math.min(allQuestions.length, 63);
+            rangeInput.max = maxLimit;
             
-            rangeInput.max = Math.min(actualCount, maxLimit);
-            
-            // もし現在の値が最大値を超えていたら調整する
-            if (parseInt(rangeInput.value) > rangeInput.max) {
-                rangeInput.value = rangeInput.max;
-                updateRangeText(rangeInput.value);
+            // 初期値が最大値を超えないよう調整する
+            if (parseInt(rangeInput.value) > maxLimit) {
+                rangeInput.value = maxLimit;
+                updateRangeText(maxLimit);
             }
         })
         .catch(error => {
-            console.error('Error loading JSON:', error);
-            alert('問題データの読み込みに失敗しました。');
+            console.error('Error:', error);
+            alert('問題データの読み込みに失敗した。');
         });
 
     function updateRangeText(val) {
@@ -159,7 +138,8 @@ HTML
 
     function showView(id) {
         document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
+        const target = document.getElementById(id);
+        if (target) target.classList.remove('hidden');
     }
 
     function startQuiz() {
@@ -167,7 +147,7 @@ HTML
         targetQuestions = [...allQuestions].sort(() => Math.random() - 0.5).slice(0, num);
         
         if (targetQuestions.length === 0) {
-            alert("問題データが読み込まれていません");
+            alert("問題データが読み込まれていない");
             return;
         }
         currentIndex = 0;
@@ -210,7 +190,9 @@ HTML
 
     function toggleExplanation() {
         const box = document.getElementById('explanation-box');
-        box.textContent = targetQuestions[currentIndex].explanation;
+        // 解説の整形：・を使わずにつなげる
+        const rawExp = targetQuestions[currentIndex].explanation || "";
+        box.textContent = rawExp.replace(/・/g, "");
         box.classList.toggle('hidden');
     }
 
@@ -228,7 +210,7 @@ HTML
         const percent = Math.round((score / targetQuestions.length) * 100);
         document.getElementById('score-display').innerHTML = 
             `正答率: <span style="color:var(--accent-color); font-weight:bold;">${percent}%</span><br>` +
-            `<span style="font-size:1.2rem;">${targetQuestions.length}問中 ${score}問 正解</span>`;
+            `<span style="font-size:1.2rem;">${targetQuestions.length}問中 ${score}問 正解である</span>`;
     }
 </script>
 
