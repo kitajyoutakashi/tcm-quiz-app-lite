@@ -30,15 +30,10 @@
 
         /* サムネイル用のスタイルを修正 */
         .top-thumbnail {
-            /* max-width: 200px; から変更 */
-            width: 100%;         /* 横幅を画面（親要素のbody）の100%にする */
-            max-width: 100%;     /* 画像本来の解像度を超えて拡大しないようにする（安全策） */
-            height: auto;        /* アスペクト比を維持 */
-            margin-bottom: 30px; /* 下のコンテナとの間に余白を作る */
-            
-            /* 画像が横いっぱいに広がる場合、角丸や影は不要かもしれないが、
-               画面幅が画像幅より広い場合の保険として残している。
-               必要に応じて削除してほしい。 */
+            width: 100%;         /* 横幅を柔軟にする */
+            max-width: 600px;    /* 最大幅を下の白いUIコンテナ(600px)と合わせる */
+            height: auto;        
+            margin-bottom: 30px; 
             border-radius: 8px;  
             box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
         }
@@ -86,7 +81,7 @@
 
 <div class="container">
     <div id="view-setup">
-        <h1>〇×で学ぶ「わかる中医学入門」</h1>
+        <h1>〇×で学ぶ<br>「わかる中医学入門」</h1>
         <p>サンプル問題の中からランダムに出題されます。</p>
         
         <label class="range-label">出題問題数を選択してください。: <span id="range-value">10</span>問</label>
