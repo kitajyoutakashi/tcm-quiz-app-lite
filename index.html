@@ -15,7 +15,28 @@
     <title>日中鍼認定Basic therapist練習ページ（Lite版）</title>
     <style>
         :root { --main-color: #2c3e50; --accent-color: #27ae60; --error-color: #e74c3c; --bg-color: #f4f7f6; }
-        body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background-color: var(--bg-color); color: var(--main-color); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        
+        /* bodyの修正: 縦並びにし、上部のpaddingを増やして全体を下げる */
+        body { 
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--main-color); 
+            margin: 0; 
+            padding: 40px 20px 20px; /* 上部の余白を大きくして全体を下げる */
+            display: flex; 
+            flex-direction: column; /* 要素を縦に並べる */
+            align-items: center;    /* 中央寄せ */
+        }
+
+        /* サムネイル用のスタイルを追加 */
+        .top-thumbnail {
+            max-width: 200px;    /* サムネイルの最大幅 */
+            height: auto;
+            margin-bottom: 30px; /* 下のコンテナとの間に余白を作る */
+            border-radius: 8px;  
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+
         .container { background: white; max-width: 600px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box; }
         .hidden { display: none; }
         h1 { font-size: 1.4rem; margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; color: var(--main-color); }
@@ -53,6 +74,9 @@
     </style>
 </head>
 <body>
+
+<!-- 追加: サムネイル画像 -->
+<img src="wakaru_chuui.jpg" alt="注意" class="top-thumbnail">
 
 <div class="container">
     <div id="view-setup">
